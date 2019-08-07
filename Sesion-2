@@ -1,0 +1,566 @@
+---
+title: "XAL2: Sácale jugo a tus datos"
+subtitle: "Sesión 2"
+author: "Said Muñoz, Miguel Nuñez"
+date: "6 de Agosto 2019"
+output:
+  pdf_document: default
+#  word_document: default
+#  beamer_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introducción a Tidyverse
+
+"The tidyverse is an opinionated collection of R packages designed for data science. All packages share an underlying design philosophy, grammar, and data structures."
+<https://www.tidyverse.org/>
+
+## Instalación
+Para instalar las bibliotecas, basta con ejecutar el siguiente comando:
+
+```{r,eval=FALSE}
+install.packages(c("tidyverse","dplyr"))
+```
+
+## Ejemplo 1
+```{r,message=FALSE,warning=FALSE}
+library(tidyverse)
+library(dplyr)
+
+
+df<-readr::read_csv("https://raw.githubusercontent.com/dataoptimal/posts/master/data%20cleaning%20with%20R%20and%20the%20tidyverse/telecom.csv")
+
+
+df %>%
+  filter(Churn=="yes")
+
+# nested functions
+log(sin(exp(2)))
+
+# piped functions
+2 %>% exp() %>%
+  sin() %>%
+  log()
+
+
+# filter on customers that churned,
+# select customerID and TotalCharges columns
+df %>%
+  filter(Churn=="yes") %>%
+  select(-c(customerID, TotalCharges))
+
+
+df$MonthlyCharges
+is.na(df$MonthlyCharges)
+anyNA(df$MonthlyCharges)
+
+df %>%
+  distinct(MonthlyCharges)
+
+# counting unique values
+df %>%
+  summarise(numero_de_elementos_unicos = n_distinct(MonthlyCharges),
+            suma=sum(MonthlyCharges,na.rm = TRUE))
+
+# counting missing values
+df %>%
+  summarise(count = sum(is.na(MonthlyCharges)))
+
+
+# counting unique, missing, and median values
+df %>% summarise(n = n_distinct(MonthlyCharges),
+                 na = sum(is.na(MonthlyCharges)),
+                 med = median(MonthlyCharges, na.rm = TRUE))
+
+# counting unique, missing, and median values
+df %>% summarise(n = n_distinct(MonthlyCharges),
+                 na = sum(is.na(MonthlyCharges)),
+                 med = median(MonthlyCharges, na.rm = TRUE))
+
+# mutate missing values
+df<-df %>%
+  mutate(CargosMensualesPesos
+         = MonthlyCharges*19.5)
+
+# mutate missing values
+df %>%
+  mutate(MonthlyCharges
+         = replace(MonthlyCharges,
+                   is.na(MonthlyCharges),
+                   0
+                   ) 
+         )
+
+palabrasEliminar<-c("na","N/A")
+
+df<-df %>%
+  mutate(TotalChargesModificada = replace(TotalCharges, TotalCharges == palabrasEliminar , NA)) %>%
+  mutate(TotalCharges = replace(TotalCharges, TotalCharges == "N/A", NA))
+
+# taking another look
+#df$TotalCharges
+#is.na(df$TotalCharges)
+
+df$TotalCharges <- as.numeric(df$TotalCharges)
+
+glimpse(df$TotalCharges)
+hist(df$TotalCharges)
+
+
+# replace missing values with median
+df <- df %>%
+  mutate(TotalCharges = replace(TotalCharges,
+                                is.na(TotalCharges),
+                                median(TotalCharges, na.rm = T)))
+df$TotalCharges
+
+## Otros problemas además de NA
+
+# looking at PaymentMethod
+df$PaymentMethod
+is.na(df$PaymentMethod)
+
+# replacing "--" with NA
+df <- df %>%
+  mutate(PaymentMethod = replace(PaymentMethod, PaymentMethod ==  "--", NA))
+
+is.na(df$PaymentMethod)
+df$PaymentMethod
+
+
+df$PaymentMethod
+
+table(df$PaymentMethod)
+
+df %>%
+  mutate(PaymentMethod = replace(PaymentMethod, is.na(PaymentMethod), "unavailable"))
+```
+
+## Titanic
+
+```{r, starwars,eval=FALSE,echo=FALSE}
+library(dplyr)
+
+starwars %>% 
+  filter(species == "Droid")
+
+starwars %>% 
+  select(name, ends_with("color"))
+
+
+
+starwars %>% 
+  mutate(name, bmi = mass / ((height / 100)  ^ 2)) %>%
+  select(name:mass, bmi)
+
+
+starwars %>% 
+  arrange(desc(mass))
+
+
+starwars %>%
+  group_by(species) %>%
+  summarise(
+    n = n(),
+    mass = mean(mass, na.rm = TRUE)
+  ) %>%
+  filter(n > 1,
+         mass > 50)
+```
+
+# Introducción a ggplot2
+
+gg se debe a `Grammar of Graphics`
+
+```{r}
+library("ggplot2")
+```
+## Dataset
+```{r}
+data(population, package = "tidyr")
+head(population)
+tidy1<-head(population,100)
+```
+
+--- 
+Map data to visual elements or parameters.
+- year -> x
+- population -> y
+- country -> shape, color, etc
+
+---
+Algunas geom conocidas:
+- geom_point()
+- geom_line()
+- geom_bar()
+- geom_histogram()
+- geom_smooth()
+- geom_boxplot()
+- geom_text()
+- geom_{vh}line()
+- geom_count()
+- geom_density()
+
+^[https://eric.netlify.com/2017/08/10/most-popular-ggplot2-geoms/]
+
+### Plots
+```{r}
+ggplot(tidy1)
+```
+
+---
+
+```{r}
+ggplot(tidy1) + aes(x=year,
+                    y=population)
+```
+
+---
+
+```{r}
+ggplot(tidy1) + aes(x=year,
+                    y=population) +
+  geom_point()
+```
+
+---
+
+```{r}
+ggplot(tidy1) + aes(x=year,
+                    y=population,
+                    color=country) +
+  geom_point() + 
+  geom_line()
+```
+
+## Ejemplo Star wars
+```{r}
+library(tidyverse)
+library(dplyr)
+sw_chars <- starwars %>%
+  mutate(
+    n_movies = map_int(films, length), 
+    gender = ifelse(
+      !gender %in% c('female', 'male'), 
+      'other', gender)
+  ) %>% 
+  select(name, gender, n_movies)
+
+sw_chars
+```
+
+```{r}
+ggplot(sw_chars) +
+  aes(x = n_movies) +
+  geom_bar(stat = "count")
+
+```
+
+
+```{r}
+install.packages("plotly")
+library("plotly")
+
+plotPeliculas<-ggplot(sw_chars) +
+  aes(x = n_movies,
+      fill = gender) + 
+  geom_bar(stat = "count")
+ggplotly(plotPeliculas)
+```
+```{r}
+sw_chars_id <- sw_chars %>% 
+  group_by(n_movies, gender) %>% 
+  tally
+```
+
+
+```{r}
+ggplot(sw_chars_id) +
+  aes(x = n_movies,
+      y = n,
+      fill = gender) +
+  geom_bar(stat = 'identity')
+```
+
+
+```{r}
+ggplot(sw_chars_id) +
+  aes(x = n_movies,
+      y = n,
+      fill = gender) +
+  geom_col(position = "fill")
+```
+
+```{r}
+ggplot(sw_chars_id) +
+  aes(x = n_movies,
+      y = n,
+      fill = gender) +
+  geom_col(position = "dodge")
+```
+
+```{r}
+g <- ggplot(sw_chars) +
+  aes(x = n_movies,
+      fill = gender) +
+  geom_bar()
+```
+
+```{r}
+g + facet_wrap(~ gender)
+
+```
+
+```{r,eval=FALSE}
+g + facet_grid(gender ~ n_movies)
+
+```
+
+```{r,eval=FALSE}
+g + facet_grid(gender ~ n_movies, scales = 'free_y')
+
+```
+
+```{r}
+g <- g + 
+  labs(
+    x = "Film Appearances",
+    y = "Count of Characters",
+    title = "Recurring Star Wars Characters",
+    subtitle = "How often do characters appear?",
+    fill = "Gender"
+  )
+
+g
+```
+
+#### Escalas
+
+scale + _ + <aes> + _ + <type> + ()
+
+```{r}
+g <- g + scale_fill_brewer(palette = 'Set1')
+
+g
+```
+
+#### Temas
+
+```{r}
+g
+g + theme_bw()
+g + theme_dark()
+g + theme_gray()
+g + theme_light()
+g + theme_minimal()
+g+theme_classic()
+```
+
+```{r}
+g
+g + theme_bw()
+```
+
+```{r}
+g + theme_minimal() + theme(text = element_text(family = "Palatino"))
+```
+
+
+
+```{r}
+g + theme(legend.position = 'bottom')
+```
+
+
+```{r,eval=F}
+g <- g +
+  theme_minimal(base_family = 'Palatino') +
+  theme(
+    axis.text.y = element_blank(),
+    strip.text = element_text(size = 18, face = 'bold'),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.x = element_line(color = "grey80", linetype = 3))
+```
+
+
+
+### Tips
+
+```{r}
+ggplot(tips) +
+  aes(x = tip) +
+  geom_histogram(   
+    binwidth = 0.25 
+  )
+
+tips$tip
+```
+
+
+```{r}
+ggplot(tips) +
+  aes(x = tip) +
+  geom_density(     
+    aes(fill = day) 
+  )
+```
+
+```{r}
+ggplot(tips) +
+  aes(x = tip) +
+  geom_density(
+    aes(fill = day),
+    alpha = 0.4)
+```
+
+
+```{r}
+ggplot(tips) +
+  aes(x = tip/total_bill) +
+  geom_density(
+    aes(fill = day)
+  ) +
+  facet_wrap(~ day)
+```
+
+```{r}
+ggplot(tips) +
+  aes(x = total_bill,
+      y = tip) + 
+  geom_point()
+```
+
+```{r}
+ggplot(tips) +
+  aes(x = total_bill,
+      y = tip) + 
+  geom_point() +
+  geom_smooth(method="lm")
+```
+
+```{r}
+graficaPropinas<-ggplot(tips) +
+  aes(x = total_bill,
+      y = tip,color=day) +
+  geom_point() +
+  geom_smooth(method = "lm")+ 
+geom_abline(            
+    slope = c(0.2, 0.15), 
+    intercept = 0,        
+    color = c('#69b578', 
+              "#dd1144"),
+    linetype = 3)
+
+ggplotly(graficaPropinas)
+
+```
+
+```{r}
+ggplot(tips) +
+  aes(x = total_bill,
+      y = tip/total_bill) + 
+  geom_point() +
+  geom_hline( 
+    yintercept = c(0.2, 0.15),
+    color = c('#69b578', 
+              "#dd1144"),
+    linetype = 1)
+```
+```{r}
+tips$percent <-  
+  tips$tip/tips$total_bill 
+ggplot(tips) +
+  aes(x = size,
+      y = percent, 
+      color = smoker) + 
+  geom_point()
+```
+```{r}
+tips$percent <- 
+  tips$tip/tips$total_bill
+ggplot(tips) +
+  aes(x = size,
+      y = percent,
+      color = smoker) +
+  geom_jitter(width = 0.25)
+```
+```{r}
+ggplot(tips) +
+  aes(x = day,
+      y = percent,
+      color = sex) +
+  geom_jitter(width = 0.25) +
+  facet_grid(time ~ smoker)
+```
+
+```{r}
+tips <- mutate(tips,
+  time = factor(time, 
+    c("Lunch", "Dinner")), 
+  day = factor(day, 
+    c("Thur", "Fri", 
+      "Sat", "Sun") 
+  ))
+ggplot(tips) +
+  aes(x = day,
+      y = percent,
+      color = sex) +
+  geom_jitter(width = 0.25) +
+  facet_grid(time ~ smoker)
+
+ggplot(tips) +
+  aes(x = day,
+      y = percent,
+      color = sex) +
+  geom_jitter(width = 0.25) +
+  facet_grid(time ~ smoker)
+```
+
+```{r}
+ggplot(tips) +
+  aes(x = day,
+      y = percent,
+      fill = time) +
+  geom_boxplot() + 
+  facet_grid(. ~ smoker)
+```
+```{r}
+ggplot(tips) +
+  aes(x = day,
+      y = percent,
+      color = smoker, 
+      fill  = smoker) + 
+  geom_violin(alpha = 0.3) + 
+  facet_wrap(~ smoker)
+```
+```{r}
+g <- ggplot(tips) +
+  aes(x = day,
+      y = percent,
+      color = smoker,
+      fill = smoker) +
+  geom_violin(alpha = 0.3) + 
+  geom_jitter(alpha = 0.4,   
+              width = 0.25,  
+              size  = 0.8)+  
+  facet_wrap(~ smoker)
+g
+```
+```{r}
+g + guides(color = FALSE,
+           fill  = FALSE) +
+  labs(x = '', 
+       y = 'Tip Rate') +
+  scale_y_continuous(        
+    labels = scales::percent 
+  )
+```
+
+# Additional Resources
++ R for Data Science: <http://r4ds.had.co.nz/>
+
