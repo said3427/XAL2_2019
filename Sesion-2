@@ -5,6 +5,7 @@ author: "Said Muñoz, Miguel Nuñez"
 date: "6 de Agosto 2019"
 output:
   pdf_document: default
+  always_allow_html: yes
 #  word_document: default
 #  beamer_presentation: default
 ---
