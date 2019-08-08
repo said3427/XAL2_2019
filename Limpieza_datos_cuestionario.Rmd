@@ -1,0 +1,230 @@
+---
+title: "Limpieza de datos Cuestionario"
+author: "Said Muñoz Montero"
+date: "8/8/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message = FALSE,warning = FALSE)
+```
+# Cuestionario
+
+Se realizó un cuestionario en el club de ciencias XAL2.
+
+Para limpiar el dataset lo primero que tenemos que hacer es cargamos las bibliotecas que necesitamos.
+
+```{r}
+library("dplyr")
+library("tidyverse")
+library("ggplot2")
+library("broom")
+library("reshape2")
+library("chron")
+library("tibble")
+```
+
+Leemos y vemos algunos parámetros.
+
+```{r}
+cuestionario<-
+  readr::read_csv(
+    "https://raw.githubusercontent.com/said3427/XAL2_2019/dev/datos/cuestionario.csv")
+
+head(cuestionario)
+```
+
+```{r}
+str(cuestionario)
+```
+
+```{r}
+summary(cuestionario)
+```
+
+# Arreglando Timestamp
+
+```{r}
+cuestionario <- 
+  cuestionario %>% mutate(Timestamp= as.chron(Timestamp,format = "%m/%d/%Y %H:%M"))
+```
+
+# Arreglando Deportes opcionales
+
+```{r}
+cuestionario %>% distinct(DeporteOpcional)
+```
+
+# Contar las opciones
+```{r}
+cuestionario %>% group_by(DeporteOpcional) %>% summarise(NumeroPosibilidades=n())
+```
+
+## Volleybol
+```{r}
+cuestionario <-
+  cuestionario %>% 
+    mutate(DeporteOpcional= 
+             ifelse(
+               str_detect(DeporteOpcional, "Volleyb"), "Volleybol", DeporteOpcional)) 
+```
+
+```{r}
+cuestionario %>% 
+  group_by(DeporteOpcional) %>% 
+  summarise(NumeroPosibilidades=n())
+```
+
+## Basquetball
+```{r}
+cuestionario <-
+  cuestionario %>% 
+  mutate(DeporteOpcional= 
+           ifelse(
+             DeporteOpcional %in% c("basketball","Basquetball","Basquetbol","Básquetbol"), 
+             "Basquetbol", 
+             DeporteOpcional)) 
+
+cuestionario %>% 
+  group_by(DeporteOpcional) %>% 
+  summarise(NumeroPosibilidades=n())
+```
+
+## Ninguno
+```{r}
+cuestionario <-
+  cuestionario %>% 
+  mutate(DeporteOpcional= 
+           ifelse(
+             DeporteOpcional %in% c("Ninguno","No"), 
+             "Ninguno", 
+             DeporteOpcional)) 
+
+cuestionario %>% 
+  group_by(DeporteOpcional) %>% 
+  summarise(NumeroPosibilidades=n())
+```
+# Grado académico
+```{r}
+cuestionario %>% group_by(GradoAcademico) %>% summarise(NumeroPosibilidades=n())
+
+cuestionario %>% 
+  group_by(GradoAcademico) %>% 
+  summarise(NumeroPosibilidades=n())
+
+cuestionario <-
+  cuestionario %>% 
+   mutate(GradoAcademico=tolower(GradoAcademico))
+
+```
+## Preparatoria
+```{r}
+cuestionario <-
+  cuestionario %>% 
+   mutate(GradoAcademico= 
+           ifelse(
+             str_detect(GradoAcademico, "preparatoria"), "preparatoria", GradoAcademico)) %>%
+  mutate(GradoAcademico= 
+           ifelse(
+             str_detect(GradoAcademico, "bachillerato"), "preparatoria", GradoAcademico))
+
+cuestionario %>% 
+  group_by(GradoAcademico) %>% 
+  summarise(NumeroPosibilidades=n())
+```
+## Universidad
+```{r}
+cuestionario <-
+  cuestionario %>% 
+  mutate(GradoAcademico= 
+           ifelse(
+             str_detect(GradoAcademico, "universi"), "universidad", GradoAcademico)) %>%
+  mutate(GradoAcademico= 
+           ifelse(
+             str_detect(GradoAcademico, "lic"), "universidad", GradoAcademico))
+
+cuestionario %>% 
+  group_by(GradoAcademico) %>% 
+  summarise(NumeroPosibilidades=n())
+```
+# Signo zodiacal
+```{r}
+cuestionario <-
+  cuestionario %>% 
+  mutate(SignoZodiacal=tolower(SignoZodiacal))
+
+cuestionario %>% 
+  group_by(SignoZodiacal) %>% 
+  summarise(NumeroPosibilidades=n())
+```
+## Cambiar Escorpion
+```{r}
+cuestionario <-
+  cuestionario %>% 
+  mutate(SignoZodiacal= 
+           ifelse(
+             str_detect(SignoZodiacal, "escorpio"), 
+             "escorpión", 
+             SignoZodiacal)) 
+
+```
+## Géminis
+```{r}
+cuestionario <-
+  cuestionario %>% 
+  mutate(SignoZodiacal= 
+           ifelse(
+             SignoZodiacal %in% c("geminis","géminis"), 
+             "géminis", 
+             SignoZodiacal)) 
+
+cuestionario %>% 
+  group_by(SignoZodiacal) %>% 
+  summarise(NumeroPosibilidades=n())
+```
+
+## Eliminar los que no especifican alguno
+```{r}
+cuestionario <-
+  cuestionario %>% 
+  mutate(SignoZodiacal= 
+           ifelse(
+             !SignoZodiacal %in% c("acuario","aries","cáncer","capricornio","escorpión","géminis","leo","piscis"), 
+             NA, 
+             SignoZodiacal)) 
+```
+
+# Analizar rápidamente los datos
+```{r, problematica}
+cuestionarioColumnasNumericas<-
+  select_if(cuestionario,is.numeric) %>% 
+  melt %>%
+  filter(variable!="Timestamp")
+
+ggplot(cuestionarioColumnasNumericas,aes(y=value,fill=variable)) + 
+  geom_boxplot() +
+  facet_wrap(~variable,scales = "free_y") +
+  theme(legend.position = 'bottom')
+```
+
+Se observa que hay un problema en peso (es dificil que alguien pese 1000 kg)
+```{r}
+cuestionario<-
+  cuestionario %>% mutate(Peso=ifelse(Peso>200,NA,Peso))
+
+cuestionarioColumnasNumericas<-
+  select_if(cuestionario,is.numeric) %>% 
+  melt %>%
+  filter(variable!="Timestamp")
+
+ggplot(cuestionarioColumnasNumericas,aes(y=value,fill=variable)) + 
+  geom_boxplot() +
+  facet_wrap(~variable,scales = "free_y") +
+  theme(legend.position = 'bottom')
+```
+# Ahora están limpios los datos
+
+## Algunas cosas que pueden hacer después
+```{r}
+cuestionario<- cuestionario %>% mutate(IMC=Peso/Estatura^2)
+```
