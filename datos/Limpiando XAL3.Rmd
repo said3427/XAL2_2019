@@ -1,0 +1,47 @@
+---
+title: 'xal3: Viscosos Pero Sabrosos'
+author: "PAGuardado"
+date: "9/8/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library("tidyverse")
+```
+```{r}
+xal3 <- read.csv(file.choose())
+```
+```{r}
+head(xal3)
+```
+```{r}
+str(xal3)
+```
+```{r}
+summary(xal3)
+```
+
+### corrección de la columna 'Club'
+```{r}
+unique(xal3$Club)
+```
+```{r}
+xal3_edit <- xal3 %>%
+#XAL1
+  mutate(Club=str_replace(Club, "XAL01", "XAL1")) %>%
+  mutate(Club=str_replace(Club, "XAL 1", "XAL1")) %>%
+  mutate(Club=str_replace(Club, "xal1", "XAL1")) %>%
+#XAL2
+  mutate(Club=str_replace(Club, "XAL 2", "XAL2")) %>%
+  mutate(Club=str_replace(Club, "xal2", "XAL2")) 
+
+```
+
+
+```{r}
+str()
+```
+
