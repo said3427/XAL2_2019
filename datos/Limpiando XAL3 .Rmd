@@ -73,15 +73,9 @@ xal3_edit <- xal3 %>%
 ### corrección de la columna 'Experiencia Previa'
 ```{r}
 xal3_edit <-xal3 %>%
-  mutate(ExperienciaPrevia =str_replace(ExperienciaPrevia,"Si", "SI"))%>%
-  mutate(ExperienciaPrevia =str_replace(ExperienciaPrevia,"Sí", "SI"))%>%
-  mutate(ExperienciaPrevia =str_replace(ExperienciaPrevia,"si", "SI"))%>%
-  mutate(ExperienciaPrevia =str_replace(ExperienciaPrevia,"sí", "SI"))%>%
-  mutate(ExperienciaPrevia =str_replace(ExperienciaPrevia,"no", "NO"))%>%
-  mutate(ExperienciaPrevia =str_replace(ExperienciaPrevia,"No", "NO"))%>%
-  mutate(ExperienciaPrevia =str_replace(ExperienciaPrevia,"SÍ", "SI"))
+  mutate(ExperienciaPrevia =str_replace(ExperienciaPrevia,c("Si|si|SÍ|sí|Sí"),"SI"))%>%
+  mutate(ExperienciaPrevia =str_replace(ExperienciaPrevia,c("No|no"),"NO"))
 ```
-
 
 ## revisar correcciones
 ```{r}
