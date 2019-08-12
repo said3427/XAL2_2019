@@ -1,0 +1,139 @@
+---
+title: 'xal3: Viscosos Pero Sabrosos'
+author: "PAGuardado"
+date: "9/8/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library("tidyverse")
+xal3 <- read.csv("xal3.csv")
+head(xal3)
+```
+```{r}
+str(xal3)
+```
+```{r}
+summary(xal3)
+```
+
+### corrección de la columna 'Club'
+```{r}
+xal3_edit <- xal3 %>%
+#XAL1
+  mutate(Club=str_replace(Club, "XAL01", "XAL1")) %>%
+  mutate(Club=str_replace(Club, "XAL 1", "XAL1")) %>%
+  mutate(Club=str_replace(Club, "xal1", "XAL1")) %>%
+#XAL2
+  mutate(Club=str_replace(Club, "XAL 2", "XAL2")) %>%
+  mutate(Club=str_replace(Club, "xal2", "XAL2")) 
+
+#head(xal3_edit)
+```
+
+### corrección de la columna 'Escuela'
+```{r}
+xal3_edit <- xal3_edit %>%
+  mutate(Escolaridad=str_replace(Escolaridad, "prepa", "Preparatoria"))%>%
+  mutate(Escolaridad=str_replace(Escolaridad, "Prepa", "Preparatoria"))%>%
+  mutate(Escolaridad=str_replace(Escolaridad, "UNI", "Universidad"))%>%
+  mutate(Escolaridad=str_replace(Escolaridad, "univ", "Universidad"))%>%
+  mutate(Escolaridad=str_replace(Escolaridad, "Preparatoriaratoria", "Preparatoria"))%>%
+  mutate(Escolaridad=str_replace(Escolaridad, "Universidadersidad", "Universidad"))%>%
+  mutate(Escolaridad=str_replace(Escolaridad, "universidad", "Universidad"))
+```
+
+### corrección de la columna 'Sexo'
+```{r}
+xal3_edit <- xal3_edit %>%
+  mutate(Sexo = str_replace(Sexo,"hombre", "M")) %>%
+  mutate(Sexo = str_replace(Sexo,"h", "M")) %>%
+  mutate(Sexo = str_replace(Sexo,"H", "M")) %>%
+  mutate(Sexo = str_replace(Sexo,"mujer", "F")) %>%
+  mutate(Sexo = str_replace(Sexo, "m", "F"))
+```
+
+### corrección de la columna 'Residencia'
+```{r}
+voc_local <- c("Local", "local", "LOCAL", "Xalapa", "xal")
+voc_foraneo <- c("Foráneo", "for", "FORANEO")
+xal3_edit$Residencia <- as.character(xal3_edit$Residencia)
+xal3_edit <- xal3_edit %>%
+  mutate(Residencia = ifelse(Residencia %in% voc_local, "Local", Residencia)) %>%
+  mutate(Residencia = ifelse(Residencia %in% voc_foraneo, "Foraneo", Residencia))
+```
+
+### corrección de la columna 'Experiencia Previa'
+```{r}
+xal3_edit <- xal3_edit %>%
+  mutate(ExperienciaPrevia =str_replace(ExperienciaPrevia,"Si", "SI"))%>%
+  mutate(ExperienciaPrevia =str_replace(ExperienciaPrevia,"Sí", "SI"))%>%
+  mutate(ExperienciaPrevia =str_replace(ExperienciaPrevia,"si", "SI"))%>%
+  mutate(ExperienciaPrevia =str_replace(ExperienciaPrevia,"sí", "SI"))%>%
+  mutate(ExperienciaPrevia =str_replace(ExperienciaPrevia,"no", "NO"))%>%
+  mutate(ExperienciaPrevia =str_replace(ExperienciaPrevia,"No", "NO"))%>%
+  mutate(ExperienciaPrevia =str_replace(ExperienciaPrevia,"SÍ", "SI"))
+```
+
+### Insecto
+```{r}
+
+xal3_edit <- xal3_edit %>%
+  mutate(Insecto =str_replace(Insecto,"Tenebrios", "Tenebrio"))%>%
+  mutate(Insecto =str_replace(Insecto,"Tenebrio", "Tenebrio"))
+```
+
+
+### corrección de la columna 'Volverías a consumir'
+```{r}
+xal3_edit <- xal3_edit%>%
+  mutate(VolveriasAConsumir =str_replace(VolveriasAConsumir,c("Si|SÍ"),"SI"))
+```
+
+### corrección 'escala de preferencia'
+```{r}
+unique(xal3_edit$EscalaPreferencia)
+xal3_edit$EscalaPreferencia<-as.character(xal3_edit$EscalaPreferencia)
+voc_ten <- c("1er", "1ER", "1", "gusano")
+voc_chap <- c("2", "2do", "2DO", "Chapulines", "chapulines")
+
+xal3_edit <- xal3_edit %>%
+  mutate(EscalaPreferencia = ifelse(EscalaPreferencia %in% voc_ten ,"Tenebrio", EscalaPreferencia)) %>%
+  mutate(EscalaPreferencia = ifelse(EscalaPreferencia %in% voc_chap ,"Chapulines", EscalaPreferencia)) %>%
+   mutate(EscalaPreferencia = ifelse(EscalaPreferencia %in% "" ,NA, EscalaPreferencia))
+
+class(xal3_edit$EscalaPreferencia)
+
+```
+
+### Gather
+```{r}
+xal3_edit <- xal3_edit %>%
+  mutate(Aroma.Láctico = as.numeric(ifelse(Aroma.Láctico == ".", NA, Aroma.Láctico)))%>%
+  mutate(Aroma.Vegetal = as.numeric(ifelse(Aroma.Vegetal == ".", NA, Aroma.Vegetal)))%>%
+  mutate(Aroma.Animal = as.numeric(ifelse(Aroma.Animal == ".", NA, Aroma.Animal)))%>%
+  mutate(Aroma.Quemado = as.numeric(ifelse(Aroma.Quemado == ".", NA, Aroma.Quemado)))%>%
+  mutate(Aroma.Mantequilla = as.numeric(ifelse(Aroma.Mantequilla == ".", NA, Aroma.Mantequilla)))
+```
+
+### Intensidad
+```{r}
+xal3_edit <- xal3_edit %>%
+  gather(Sabor.Dulce:Sabor.Metálico, key = "Sabor", value = "IntensidadSabor") %>%
+  gather(Aroma.Láctico:Aroma.Mantequilla, key = "Aroma", value = "IntensidadAroma") %>%
+  gather(Textura.Gránulo:Textura.Fácil.de.romper, key = "Textura", value = "IntensidadTextura")
+```
+
+
+
+
+## revisar correcciones
+```{r}
+str(xal3_edit)
+```
+
+
+

@@ -1,0 +1,41 @@
+﻿ID,Club,ExperienciaPrevia,Sexo,Residencia,Escolaridad,Insecto,EscalaFacial,EscalaCalificativa,Sabor-Dulce,Sabor-Salado,Sabor-Ácido,Sabor-Amargo,Sabor-Humánico,Sabor-Fermentado,Sabor-Afrutado,Sabor-Astringente,Sabor-Picante,Sabor-Metálico,Textura-Gránulo,Textura-Grumoso,Textura-Compacto,Textura-Gomoso,Textura-Rugosa,Textura-Grasa,Textura-Humedad,Textura-Fácil de romper,Aroma-Láctico,Aroma-Vegetal,Aroma-Animal,Aroma-Quemado,Aroma-Mantequilla,EscalaPreferencia,VolveriasAConsumir
+1,XAL01,Si,F,Foráneo,Universidad,Chapulín,4,10,1,3,3,1,2,1,2,1,2,1,1,2,3,3,1,1,3,3,1,1,3,1,2,1,Si
+1,XAL01,Si,F,Foráneo,Universidad,Tenebrios,5,9,1,3,3,1,3,1,1,3,1,1,1,1,1,1,3,1,3,3,1,3,1,1,3,2,Si
+2,XAL01,No,M,Local,Preparatoria,Chapulín,5,8,1,3,3,1,1,2,1,1,1,1,1,2,1,2,3,1,2,2,1,2,2,1,1,1,Si
+2,XAL01,No,M,Local,Preparatoria,Tenebrios,5,7,1,2,1,2,1,1,1,2,1,1,1,1,2,1,1,1,1,3,1,2,3,3,1,2,Si
+3,XAL 1,No,F,Xalapa,Universidad,Tenebrio,3,10,2,3,1,1,1,1,1,3,1,1,1,1,3,1,2,1,1,3,1,2,1,1,3,1ER,SÍ
+3,XAL 1,No,F,Xalapa,Universidad,Chapulín,2,6.5,1,3,3,1,2,1,1,3,3,1,1,1,3,1,3,1,2,2,2,1,1,3,1,2DO,SÍ
+4,XAL 1,No,M,Xalapa,Prepa,Tenebrio,3,8,1,1,1,1,3,1,1,2,1,2,3,1,3,1,1,1,1,3,1,2,1,1,1,2do,SÍ
+4,XAL 1,No,M,Xalapa,Prepa,Chapulín,3,8,1,2,2,1,2,1,1,1,2,1,2,1,2,1,2,1,1,3,1,3,1,2,1,1er,SÍ
+5,XAL 2,Sí,F,Foráneo,Universidad,Tenebrio,3,4,1,2,1,1,1,1,1,3,1,1,2,3,3,1,2,1,1,3,1,1,1,1,1,1er,SÍ
+5,XAL 2,Sí,F,Foráneo,Universidad,Chapulín,1,3,1,3,3,1,1,1,2,1,1,1,1,3,1,2,1,2,3,1,1,1,1,1,1,2do,SÍ
+6,XAL2,No,M,Foráneo,Prepa,Tenebrio,3,7,2,2,1,2,2,1,2,1,1,2,3,2,1,2,2,1,1,1,2,2,3,1,1,1er,SÍ
+6,XAL2,No,M,Foráneo,Prepa,Chapulín,4,6,1,3,2,2,1,1,1,1,1,1,2,2,1,1,3,2,2,2,1,1,2,1,1,2do,SÍ
+7,xal1,si,h,local,universidad,Tenebrio,2,10,2,1,1,1,1,1,1,3,1,1,1,2,3,1,1,2,1,3,1,2,1,1,2,Chapulines,Si
+7,xal1,si,h,local,universidad,Chapulín,5,10,1,2,3,1,2,1,1,1,1,1,1,1,3,1,3,1,2,3,1,1,1,2,1,Chapulines,Si
+8,xal1,si,h,local,prepa,Tenebrio,2,8,1,1,1,1,2,1,1,2,1,1,3,1,3,1,2,3,2,3,1,1,1,3,1,Chapulines,Si
+8,xal1,si,h,local,prepa,Chapulín,2,9,1,3,3,1,3,1,1,1,1,1,3,1,3,3,2,3,3,2,1,1,3,3,1,Chapulines,Si
+9,xal2,si,m,local,universidad,Tenebrio,3,8,1,1,1,1,1,1,1,3,1,1,3,3,1,1,3,1,1,3,1,1,1,1,1,Chapulines,Si
+9,xal2,si,m,local,universidad,Chapulín,3,9,1,2,3,1,1,1,1,1,1,1,1,3,3,1,3,3,3,3,1,3,1,3,1,Chapulines,Si
+10,xal2,si,h,local,universidad,Tenebrio,4,10,2,2,1,2,3,1,1,3,1,1,3,3,3,3,3,1,1,3,1,1,1,2,1,Chapulines,Si
+10,xal2,si,h,local,universidad,Chapulín,4,9,1,3,3,1,1,1,1,3,1,1,2,3,3,2,3,1,3,3,1,1,1,2,1,Chapulines,Si
+11,XAL 1,si,hombre,for,univ,Tenebrio,5,8,1,3,1,1,2,1,2,1,1,2,3,1,1,1,3,3,1,3,.,.,.,.,.,chapulines,Si
+11,XAL 1,si,hombre,for,univ,Chapulín,5,10,2,3,3,1,1,1,2,1,1,1,3,2,2,2,2,1,2,2,.,.,.,.,.,,Si
+12,XAL 1,no,mujer,xal,prepa,Tenebrio,4,8,1,2,3,2,1,1,1,2,1,1,1,1,2,1,1,1,2,3,1,1,2,2,1,,Si
+12,XAL 1,no,mujer,xal,prepa,Chapulín,4,8.5,1,1,1,1,2,1,1,1,1,2,3,1,1,1,2,1,1,3,1,1,1,3,1,gusano,Si
+13,XAL 1,sí,hombre,xal,univ,Tenebrio,5,8,1,3,1,1,1,1,1,1,1,1,3,1,1,1,3,3,1,3,1,3,1,3,1,chapulines,Si
+13,XAL 1,sí,hombre,xal,univ,Chapulín,5,10,1,3,2,1,1,1,1,1,2,2,3,2,3,3,2,1,3,2,1,2,3,1,1,,Si
+14,XAL 2,sí,mujer,for,prepa,Tenebrio,4,8,1,2,1,1,2,1,1,3,1,1,1,1,2,1,2,1,1,3,1,2,1,1,1,,Si
+14,XAL 2,sí,mujer,for,prepa,Chapulín,5,8,1,3,3,1,2,1,1,1,2,1,1,2,1,1,2,1,2,3,1,1,1,2,1,chapulines,Si
+15,XAL 2,SÍ,hombre,for,univ,Tenebrio,3,4,1,2,1,1,2,1,1,2,1,1,3,1,1,1,3,1,1,3,1,2,1,1,1,,Si
+15,XAL 2,SÍ,hombre,for,univ,Chapulín,2,7,1,3,3,1,1,2,1,1,3,2,3,3,1,1,3,1,1,2,1,2,2,1,1,chapulines,Si
+16,,NO,M,FORANEO,UNI,Tenebrio,2,5,1,2,1,1,1,1,1,1,1,1,2,1,3,1,1,2,2,3,1,1,2,2,2,,SI
+16,,NO,M,FORANEO,UNI,Chapulín,3,7,2,2,2,1,1,2,2,1,1,1,2,2,1,2,2,2,2,2,1,2,2,2,1,2do,SI
+17,,NO,H,FORANEO,UNI,Tenebrio,3,5,2,2,1,1,2,1,1,1,1,2,2,1,3,1,2,1,1,3,1,1,1,1,1,,SI
+17,,NO,H,FORANEO,UNI,Chapulín,4,7,1,3,3,2,1,1,2,2,1,1,1,1,1,1,3,1,2,3,1,1,2,2,2,2do,SI
+18,,SI,M,LOCAL,UNI,Tenebrio,4,7,1,3,1,1,2,1,1,1,2,1,1,1,3,1,2,3,3,3,1,1,1,2,1,1er,SI
+18,,SI,M,LOCAL,UNI,Chapulín,1,5,1,3,2,1,1,1,1,2,2,1,2,3,1,1,3,3,3,3,1,2,1,1,1,,SI
+19,,SI,M,FORANEO,UNI,Tenebrio,3,7,1,1,1,1,2,1,1,3,1,1,2,1,2,1,3,2,1,3,1,1,3,1,1,,SI
+19,,SI,M,FORANEO,UNI,Chapulín,5,10,1,3,2,1,1,1,1,1,1,1,1,2,1,2,1,2,2,1,1,1,3,2,1,2do,SI
+20,,NO,H,FORANEO,UNI,Tenebrio,3,4,2,2,1,1,2,1,1,1,1,2,1,1,3,1,2,1,1,3,1,1,1,1,1,,SI
+20,,NO,H,FORANEO,UNI,Chapulín,3,7,1,3,3,1,1,1,2,2,1,1,1,1,1,1,3,1,1,3,1,1,2,2,2,2do,SI

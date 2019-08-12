@@ -1,0 +1,29 @@
+---
+title: "ProyectoFinal"
+author: "Said Muñoz Montero"
+date: "9/8/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library("tidyverse")
+library("dplyr")
+library("ggplot2")
+library("stringr")
+library("readr")
+```
+
+```{r}
+xal3_edit <-  %>%
+#XAL1
+  mutate(Club=str_replace(Club, "XAL01", "XAL1")) %>%
+  mutate(Club=str_replace(Club, "XAL 1", "XAL1")) %>%
+  mutate(Club=str_replace(Club, "xal1", "XAL1")) %>%
+#XAL2
+  mutate(Club=str_replace(Club, "XAL 2", "XAL2")) %>%
+  mutate(Club=str_replace(Club, "xal2", "XAL2")) 
+```
+
